@@ -1,4 +1,5 @@
 #Adding a line to test conflict
+#Conflicts can happen when you forget to push and pull
 # Basics of R -------------------------------------------------------------
 
 colnames(airquality)
