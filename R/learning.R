@@ -1,3 +1,4 @@
+#Conflicts can happen when you forget to push and pull
 # Basics of R -------------------------------------------------------------
 
 colnames(airquality)
