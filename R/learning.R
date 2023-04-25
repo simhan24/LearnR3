@@ -14,3 +14,5 @@ mean(2:6)
 # Loading packages --------------------------------------------------------
 
 library(tidyverse)
+
+#   I will use this document to test out functionalities of GIT
