@@ -10,7 +10,8 @@ TODO: Give a brief description of what your project is about
 This project now contains a random sentence to test pushing and 
 pulling...
 
-Now i made blimblam random sentence to test pulling from github
+
+Now i made blimblamblahblah random sentence to test pulling from github
 
 # Brief description of folder and file contents
 
