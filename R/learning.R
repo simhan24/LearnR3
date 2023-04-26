@@ -99,6 +99,8 @@ nhanes_small %>%
   mutate(old = if_else(age >= 30, "Yes", "No"))
 
 
+
+# Exercise 7.12 -----------------------------------------------------------
 #Starting exercise 7.12
 
 # 1. BMI between 20 and 40 with diabetes
@@ -116,6 +118,30 @@ nhanes_modified <- nhanes_small %>% # Specifying dataset
     )
 
 nhanes_modified
-# Exercise 7.12 -----------------------------------------------------------
 
 
+# Exercise 7.14 creating summary statistics-----------------------------------------------------------
+
+nhanes_small %>%
+    summarise(max_bmi = max(bmi, na.rm = TRUE),
+              min_bmi = min(bmi, na.rm = TRUE))
+
+
+nhanes_small %>%
+    #Filter to only show rows where there is no missing data (NA)
+    filter(!is.na(diabetes)) %>%
+    #Group the data by diabetes status
+    group_by(diabetes) %>%
+    #summarise, in the diabetes yes or no, the mean age and mean bmi,
+    #ignore rows with missing data
+    summarise(mean_age = mean(age, na.rm = TRUE),
+              mean_bmi = mean(bmi, na.rm = TRUE)) %>%
+    #ungrouping doesn't matter here, but if we were to continue piping functions in,
+    #were they shouldnt be grouped, we need to remove it
+    ungroup()
+
+# saving data
+readr::write_csv(nhanes_small, here::here("data/nhanes_small.csv"))
+
+nhanes_small %>%
+    count(diabetes == "NA")
