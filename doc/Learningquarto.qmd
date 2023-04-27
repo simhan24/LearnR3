@@ -72,6 +72,8 @@ This image is of the awesome new calorimeter in @fig-get-in-here
 
 #Visualising data (Section 9)
 
+GENERAL: IF YOU NEED TO USE "WRANGLING" FX FILTERING OUT VALUES ETC; you should use dplyr package and you should use the piping theme, ie. nhanes_small %>%  filter etc %>%  ggplot
+
 ```{r histogram bmi 1}
 # Create histogram for bmi
 ggplot(nhanes_small, aes(x = bmi)) +
@@ -158,4 +160,99 @@ nhanes_small %>%
   filter(!is.na(education)) %>%
   ggplot(aes(x = education)) +
   geom_bar()
+```
+
+
+###coding chunks for continuous variables plotting 2 variables
+
+```{r hex plot of bmi vs systolic blood pressure}
+ggplot(nhanes_small, aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE)
+```
+
+```{r same hex plot adding a smoothing line with conficdence interval}
+# add a smoothing line by using geom_smooth in another layer using +
+ggplot(nhanes_small, aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
+```
+
+###plotting two categorical variables
+
+"fill =" means that you fill out the two columns of diabetes yes or no, with the distribution of education levels
+```{r plotting two categorical variables with fillling the columns}
+# two categorical variables
+nhanes_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar()
+```
+
+```{r placing them side by side with dodge}
+# "Dodged" bar plot
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge())
+```
+### plotting continuous and discrete variables together
+
+Example, plotting the bmi pr diabetes status
+```{r}
+# using mixed data
+nhanes_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(x = diabetes, y = bmi)) +
+  geom_violin(na.rm = TRUE)
+```
+
+
+
+## Exercise to make plots with one or two variables
+
+```{r}
+library(NHANES)
+nhanes_exercise <- NHANES %>%
+  rename_with(snakecase::to_snake_case) %>%
+  rename(sex = gender)
+```
+
+```{r}
+#| fig-cap: "Distribution of age and age at diabetes diagnosis"
+#| label: fig-nhanes-exercise
+#| layout-ncol: 2
+#| fig-subcap:
+#|   - "Age"
+#|   - "Age at diabetes diagnosis"
+# Distribution of age
+ggplot(nhanes_exercise, aes(x = age)) +
+  geom_density(na.rm = TRUE)
+
+# Distribution of age at diabetes diagnosis
+ggplot(nhanes_exercise, aes(x = diabetes_age)) +
+  geom_density(na.rm = TRUE)
+```
+
+
+
+```{r}
+# Number of people who smoke now and are or above 20 years of age,
+# removing those with missing smoking status.
+#| label: fig-smoking-age20+
+#| fig-cap: "Number of people aged 20 years or more currently smoking"
+nhanes_exercise %>%
+  filter(age >= 20, !is.na(smoke_now)) %>%
+  ggplot(aes(x = smoke_now)) +
+  geom_bar()
+```
+
+
+
+```{r}
+# BMI in relation to mean arterial pressure
+nhanes_exercise %>%
+  mutate(mean_arterial_pressure = (bp_sys_ave + (2 * bp_dia_ave)) / 3) %>%
+  ggplot(aes(x = bmi, y = mean_arterial_pressure)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
 ```
