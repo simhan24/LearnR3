@@ -208,9 +208,9 @@ nhanes_small %>%
 
 
 
-## Exercise to make plots with one or two variables
+## Exercise 9.5 to make plots with one or two variables
 
-```{r}
+```{r loading full NHANES library}
 library(NHANES)
 nhanes_exercise <- NHANES %>%
   rename_with(snakecase::to_snake_case) %>%
@@ -256,3 +256,26 @@ nhanes_exercise %>%
   geom_hex(na.rm = TRUE) +
   geom_smooth(na.rm = TRUE)
 ```
+
+
+
+### Plotting three or more variables
+
+general thing. the color =  function colors out the outline of e.g. the boxplot. the fill = function fills it out.
+
+```{r two categorical and one continuous}
+#plotting systolic BP in relation to education and diabetes 
+#plotting the last variable as a color. 
+nhanes_small %>% 
+    filter(!is.na(diabetes), !is.na(education)) %>% 
+    ggplot(aes(x = education, y = bp_sys_ave, color = diabetes)) +
+    geom_boxplot(na.rm = TRUE)
+```
+
+```{r}
+#plotting BMI in relation to systolic blood pressure and age
+nhanes_small %>% 
+    ggplot(aes(x = bmi, y = bp_sys_ave, color = age)) + 
+    geom_point(na.rm = TRUE)
+```
+
