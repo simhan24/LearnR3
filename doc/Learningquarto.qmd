@@ -4,6 +4,7 @@ author: "Simon"
 format: html
 ---
 
+#Intro stuff section 8
 ```{r}
 2 + 2
 ```
@@ -59,7 +60,7 @@ nhanes_small %>%
   knitr::kable(caption = "Mean values of age and bmi for education and diabetes status")
 ```
 
-##Putting in an IMAGE or figure
+##Putting in an IMAGE or figure section 8
 
 When you type out the path of the image, it needs to start from where the Cuarto file is placed. Here the cuarto file QMD is placed in the "doc" folder, so the part starts from there. If you need to back to another folder, you need to write    ..      like the return arrow in the files.
 This is cumbersome, so its easier to just place the images and figures in the same path
@@ -68,3 +69,93 @@ This image is of the awesome new calorimeter in @fig-get-in-here
 
 ![New calorimeter taken by me](Images_learning_R/Calorimeter1.jpg){#fig-get-in-here width="100%" height=100%"}
 
+
+#Visualising data (Section 9)
+
+```{r histogram bmi 1}
+# Create histogram for bmi
+ggplot(nhanes_small, aes(x = bmi)) +
+  geom_histogram()
+```
+
+```{r histogram bmi 2}
+# create histogram for BMI without missing values
+ggplot(nhanes_small, aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+
+```{r histogram with selected or filtered data}
+nhanes_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+BMI distribution in NHANES dataset was visualised in @fig-bmi-histo
+
+WHEN YOU MAKE A FIGURE LABEL, ALWAYS HAVE IT START WITH    fig- 
+
+```{r histogram with added labels and caption}
+#| fig-cap: "Distribution of BMI."
+#| label: fig-bmi-histo
+
+nhanes_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+
+```{r bar plot to visualise counts}
+# create count barplot for education
+ggplot(nhanes_small, aes(x = education)) +
+  geom_bar()
+```
+You cannot 
+
+```{r bar plot to visualise, diabetes}
+# create count barplot of diabetes
+ggplot(nhanes_small, aes(x = diabetes)) +
+  geom_bar()
+```
+
+
+```{r bar plot to visualise, diabetes with removing NA values}
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes)) +
+  geom_bar()
+```
+
+
+```{r same as above, but with education}
+nhanes_small %>%
+  filter(!is.na(education)) %>%
+  ggplot(aes(x = education)) +
+  geom_bar()
+```
+
+fig-subcap is subcaption for the different bar plots placed side by side. 
+layout-ncol defines how many columns placed side by side, in this case 2.
+
+
+
+```{r creating 2 bar plots next to each other with subcaptions and captions}
+#| label: fig-diabetes-education
+#| fig-cap: "Counts of diabetes and education in NHANES"
+#| fig-subcap:
+#|   - "Number of those with or without diabetes."
+#|   - "Number of those with different education level."
+#| layout-ncol: 2
+
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes)) +
+  geom_bar()
+
+nhanes_small %>%
+  filter(!is.na(education)) %>%
+  ggplot(aes(x = education)) +
+  geom_bar()
+```
