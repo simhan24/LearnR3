@@ -5,7 +5,7 @@ format: html
 ---
 
 ```{r}
-2+2
+2 + 2
 ```
 if you write R setup, it always runs this code first. 
 ```{r setup}
@@ -37,4 +37,34 @@ nhanes_small %>%
   knitr::kable(caption = "Mean values of age and bmi for education and diabetes status")
 ```
 
+
+## prettier table
+```{r prettier-table}
+#| echo: false
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  group_by(diabetes, education) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    mean_bmi = mean(bmi, na.rm = TRUE)
+  ) %>%
+  mutate(
+    mean_age =
+      round(mean_age, digits = 1)
+  ) %>%
+  mutate(mean_bmi = round(mean_bmi, digits = 1)) %>%
+  mutate(education = str_to_sentence(education)) %>%
+  rename("Diabetes status" = diabetes, Education = education, "Mean age" = mean_age, "Mean BMI" = mean_bmi) %>%
+  ungroup() %>%
+  knitr::kable(caption = "Mean values of age and bmi for education and diabetes status")
+```
+
+##Putting in an IMAGE or figure
+
+When you type out the path of the image, it needs to start from where the Cuarto file is placed. Here the cuarto file QMD is placed in the "doc" folder, so the part starts from there. If you need to back to another folder, you need to write    ..      like the return arrow in the files.
+This is cumbersome, so its easier to just place the images and figures in the same path
+
+This image is of the awesome new calorimeter in @fig-get-in-here
+
+![New calorimeter taken by me](Images_learning_R/Calorimeter1.jpg){#fig-get-in-here width="100%" height=100%"}
 
