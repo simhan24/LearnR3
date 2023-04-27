@@ -72,6 +72,15 @@ This image is of the awesome new calorimeter in @fig-get-in-here
 
 #Visualising data (Section 9)
 
+SUMMARY:
+Use the “Grammar of Graphics” approach in conjunction with the ggplot2 package within the tidyverse to plot your data.
+Prioritize plotting raw data instead of summaries whenever possible.
+ggplot2 has 4 levels of grammar: aes() (which data to plot), geom_ (what kind of plot), scale_ (to make the plot pretty), and theme() (to control the specifics of the plot), you chain them with +
+Only use barplots for discrete values. If applying them on continuous variables, it hides the distribution of the data.
+To plot more dimensions, use colour, the X axis, the Y axis, or facet_grid().
+Use colour blind-friendly palettes, such as viridis.
+Save plots using ggsave().
+
 GENERAL: IF YOU NEED TO USE "WRANGLING" FX FILTERING OUT VALUES ETC; you should use dplyr package and you should use the piping theme, ie. nhanes_small %>%  filter etc %>%  ggplot
 
 ```{r histogram bmi 1}
@@ -324,3 +333,16 @@ nhanes_small %>%
 ```
 
 ###Do exercises 9.8, 9.9, 9.10 to learn more
+
+## Exercise for changing colours
+
+```{r}
+# Barplot to work from, with two discrete variables
+nhanes_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>% 
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge()) +
+  scale_fill_viridis_d()
+
+```
+
